@@ -1,0 +1,33 @@
+.test_base:
+    before_script:
+        - apt-get -q update
+        - apt-get -y install cmake
+    variables:
+        ERLANG_ROCKSDB_OPTS: "-DWITH_BUNDLE_LZ4=ON -DWITH_BUNDLE_SNAPPY=ON"
+    script:
+        - ./deps/rebar3 eunit
+
+.shared_libs_test_base:
+    before_script:
+        - apt-get -q update
+        - apt-get -y install cmake liblz4-dev libsnappy-dev
+    variables:
+        ERLANG_ROCKSDB_OPTS: "-DWITH_LZ4=ON -DWITH_SNAPPY=ON"
+    script:
+        - ./deps/rebar3 eunit
+
+erlang25:
+    extends: .test_base
+    image: erlang:25
+
+erlang24:
+    extends: .test_base
+    image: erlang:24
+
+erlang23:
+    extends: .test_base
+    image: erlang:23
+
+erlang23_shared_libs:
+    extends: .shared_libs_test_base
+    image: erlang:23
